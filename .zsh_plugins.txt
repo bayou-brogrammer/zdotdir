@@ -3,27 +3,18 @@
 #
 
 # Load near the top so you get p10k's instaprompt if you need it.
-zshzoo/prompt
-#mattmc3/zephyr path:plugins/prompt
-
-mattmc3/zephyr path:plugins/zfunctions
+$ZSH_CUSTOM path:plugins/p10k-instaprompt
+mattmc3/zfunctions
+$ZSH_CUSTOM path:plugins/xdg
 
 # Zephyr
-mattmc3/zephyr path:plugins/homebrew
-mattmc3/zephyr path:plugins/environment
-mattmc3/zephyr path:plugins/utility
-mattmc3/zephyr path:plugins/color
-mattmc3/zephyr path:plugins/confd
-mattmc3/zephyr path:plugins/directory
-mattmc3/zephyr path:plugins/editor
-mattmc3/zephyr path:plugins/history
+# mattmc3/zephyr path:plugins/homebrew
+# mattmc3/zephyr path:plugins/environment
+# mattmc3/zephyr path:plugins/utility
+# mattmc3/zephyr path:plugins/color
+# mattmc3/zephyr path:plugins/directory
+# mattmc3/zephyr path:plugins/history
 mattmc3/zephyr path:plugins/macos conditional:is-macos
-
-# Clipboard
-# ohmyzsh/ohmyzsh path:lib/clipboard.zsh
-# ohmyzsh/ohmyzsh path:plugins/copyfile
-# ohmyzsh/ohmyzsh path:plugins/copybuffer
-# ohmyzsh/ohmyzsh path:plugins/copypath
 
 # Custom
 $ZSH_CUSTOM path:plugins/abbreviations
@@ -42,15 +33,18 @@ ohmyzsh/ohmyzsh path:plugins/extract
 ohmyzsh/ohmyzsh path:plugins/magic-enter
 ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z
 
-# Completion
-mattmc3/zephyr path:plugins/completion
+# Prompt
+sindresorhus/pure kind:fpath
+romkatv/powerlevel10k kind:fpath
 
-# custom
-mattmc3/zsh_custom path:plugins/python
-
-# regular plugins
-mattmc3/zman
+# z - jump around
 ajeetdsouza/zoxide
+
+# Regular plugins
+mattmc3/zman
+
+# Final plugins
+mattmc3/zshrc.d
 zdharma-continuum/fast-syntax-highlighting
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-history-substring-search
