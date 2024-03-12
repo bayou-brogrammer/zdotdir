@@ -27,9 +27,9 @@ fi
 # Set GNU LS_COLORS
 if [[ -z "$LS_COLORS" ]]; then
   if (( $+commands[dircolors] )); then
-    source <(dircolors -b)
+    cached-eval 'dircolors' dircolors -b
   elif (( $+commands[gdircolors] )); then
-    source <(gdircolors -b)
+    cached-eval 'gdircolors' gdircolors -b
   else
     export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=1;36:cd=1;33:su=30;41:sg=30;46:tw=30;42:ow=30;43"
   fi
@@ -40,6 +40,11 @@ if (( ! $+commands[dircolors] )); then
   # For BSD systems, set LSCOLORS
   export CLICOLOR=${CLICOLOR:-1}
   export LSCOLORS="${LSCOLORS:-exfxcxdxbxGxDxabagacad}"
+fi
+
+# Use diff --color if available
+if command diff --color /dev/null{,} &>/dev/null; then
+  alias diff="${aliases[diff]:-diff} --color"
 fi
 
 # Set completion colors.
