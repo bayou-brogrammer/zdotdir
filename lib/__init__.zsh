@@ -26,7 +26,8 @@ function cached-eval {
   local cmdname=$1; shift
   local memofile=$__zsh_cache_dir/memoized/${cmdname}.zsh
   local -a cached=($memofile(Nmh-20))
-  if ! (( ${#cached} )); then
+  # If the file has no size (is empty), or is older than 20 hours re-gen the cache.
+  if [[ ! -s $memofile ]] || (( ! ${#cached} )); then
     mkdir -p ${memofile:h}
     "$@" >| $memofile
   fi
@@ -66,9 +67,3 @@ path=(
   /usr/local/{,s}bin(N)
   $path
 )
-
-# fpath=(
-#   $HOMEBREW_PREFIX/share/zsh/functions(N)
-#   $HOMEBREW_PREFIX/share/zsh/site-functions(N)
-#   $fpath
-# )
