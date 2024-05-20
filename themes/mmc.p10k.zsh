@@ -109,6 +109,7 @@
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
     vcs                     # git status
+    # shell                 # custom - show symbol representing current shell
   )
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
@@ -193,7 +194,7 @@
   # Red prompt symbol if the last command failed.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
   # Default prompt symbol.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='❱'
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='%%'  # ❱
   # Prompt symbol in command vi mode.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='❮'
   # Prompt symbol in visual vi mode.
@@ -370,7 +371,7 @@
       # Styling for up-to-date Git status.
       local       meta='%f'     # default foreground
       local      clean='%76F'   # green foreground
-      local      dirty='%255F'  # white foreground
+      local      dirty='%226F'  # yellow foreground
       local   modified='%39F'   # blue foreground
       local conflicted='%196F'  # red foreground
     else
@@ -421,11 +422,11 @@
       res+=" ${modified}wip"
     fi
 
-    # • if dirty.
+    # asterisk if dirty.
     if (( VCS_STATUS_NUM_STAGED || VCS_STATUS_NUM_UNSTAGED || VCS_STATUS_NUM_UNTRACKED )) ||
        (( VCS_STATUS_HAS_UNSTAGED == -1 ))
     then
-      res+="${dirty}•"
+      res+="${dirty}*"  # ✱ • *
     fi
     if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
       res+=" "
@@ -1645,6 +1646,14 @@
     # instant_prompt_example. This will give us the same `example` prompt segment in the instant
     # and regular prompts.
     prompt_example
+  }
+
+  # Add shell indicator to prompt.
+  function prompt_shell() {
+    p10k segment -f 6 -t '%%'
+  }
+  function instant_prompt_shell() {
+    prompt_shell
   }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
