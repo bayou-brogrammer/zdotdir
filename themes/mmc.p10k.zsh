@@ -34,6 +34,7 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # os_icon               # os identifier
     dir                     # current directory
+    #prompt_prechar          # pre prompt symbol
     prompt_char             # prompt symbol
   )
 
@@ -109,7 +110,7 @@
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
     vcs                     # git status
-    shell
+    # shell                 # custom - show symbol representing current shell
   )
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
@@ -194,7 +195,7 @@
   # Red prompt symbol if the last command failed.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
   # Default prompt symbol.
-  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='❱'
+  typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='%%'  # ❱
   # Prompt symbol in command vi mode.
   typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='❮'
   # Prompt symbol in visual vi mode.
@@ -1654,6 +1655,13 @@
   }
   function instant_prompt_shell() {
     prompt_shell
+  }
+
+  function prompt_prompt_prechar() {
+    p10k segment -t '❱'
+  }
+  function instant_prompt_prompt_prechar() {
+    prompt_prompt_prechar
   }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
