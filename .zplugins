@@ -37,6 +37,7 @@ $ZSH_CUSTOM/plugins/git
 $ZSH_CUSTOM/plugins/golang
 $ZSH_CUSTOM/plugins/otp
 $ZSH_CUSTOM/plugins/python
+$ZSH_CUSTOM/plugins/mise
 
 #
 # Utils
