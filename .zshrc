@@ -75,6 +75,7 @@ prompt "$ZSH_THEME[@]"
 # Manually call post_zshrc to bypass the hook
 (( $+functions[run_post_zshrc] )) && run_post_zshrc
 
+# Run warpshell
 printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh" }}\x9c'
 
 # Finish profiling by calling zprof.
