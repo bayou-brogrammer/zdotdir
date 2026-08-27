@@ -99,5 +99,6 @@ alias pi-coms="pi -e $_PI_EXT/coms-net.ts -e $_PI_EXT/minimal.ts -e $_PI_EXT/the
 
 # Quick alias for Claude Code
 alias cc='claude'
-# Claude Code with skip permissions for trusted projects
-alias ccs='claude --dangerously-skip-permissions'
+# Claude Code with skip permissions for trusted projects.
+# Was `ccs`; that name is now the CCS (Claude Codex Switch) binary.
+alias ccy='claude --dangerously-skip-permissions'

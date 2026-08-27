@@ -59,23 +59,30 @@ path=(
   $path
 )
 
-# `brew shellenv` forks the brew binary and gets called independently by
-# profile.sh, zshrc1, zsh_custom's z1.zsh, and conf.d/homebrew.zsh — cache
-# its output once so the other 3 calls become instant.
-# ponytail: cache never expires; `rm $ZSH_CACHE_DIR/brew-shellenv.zsh` to refresh after a brew upgrade.
-if (( $+commands[brew] )); then
-  brew() {
-    if [[ $1 == shellenv ]]; then
-      local cachefile="$ZSH_CACHE_DIR/brew-shellenv.zsh"
-      [[ -s $cachefile ]] || { mkdir -p ${cachefile:h}; command brew shellenv >| $cachefile; }
-      cat $cachefile
-      return
-    fi
-    command brew "$@"
-  }
+# Homebrew env without `brew shellenv`. Homebrew 6's shellenv evals
+# path_helper with PATH_HELPER_ROOT=/opt/homebrew, which rebuilds PATH
+# from brew's paths.d and can drop /bin:/usr/bin. Set the vars brew
+# itself needs and put its bins on PATH; skip z1's brew shellenv via
+# `zstyle ':z1:homebrew' skip yes` in .zstyles.
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  export HOMEBREW_PREFIX=/opt/homebrew
+  export HOMEBREW_CELLAR=/opt/homebrew/Cellar
+  export HOMEBREW_REPOSITORY=/opt/homebrew
+  path=($HOMEBREW_PREFIX/bin $HOMEBREW_PREFIX/sbin $path)
+elif [[ -x /usr/local/bin/brew ]]; then
+  export HOMEBREW_PREFIX=/usr/local
+  export HOMEBREW_CELLAR=/usr/local/Cellar
+  export HOMEBREW_REPOSITORY=/usr/local
+  path=($HOMEBREW_PREFIX/bin $HOMEBREW_PREFIX/sbin $path)
 fi
+# Re-assert core dirs after any PATH rebuild above.
+path+=(/bin /usr/bin /usr/sbin /sbin)
 
 [ -f "$HOME/.config/shell/profile.sh" ] && . "$HOME/.config/shell/profile.sh"
+
+# profile.sh evals `brew shellenv`, which runs path_helper and can drop /bin.
+# Re-assert after that so later conf.d (forge caches call `date`) still works.
+path+=(/bin /usr/bin /usr/sbin /sbin)
 
 # pnpm - ensure global bin dir is in PATH for non-interactive shells (e.g. topgrade)
 export PNPM_HOME="/Users/lecoqjacob/.local/share/pnpm"

@@ -52,11 +52,20 @@ zstyle ':zsh_custom:plugin:editor:*' 'enabled' 'yes'
 # git
 zstyle ':zsh_custom:plugin:git' default-user lecoqjacob
 
-# zshrc.d location
-zstyle ':zsh_custom:plugin:confd' directory $ZDOTDIR/conf.d
+# zshrc.d location. Quote + default: an unquoted $ZDOTDIR here becomes an
+# empty zstyle value if this file is sourced before ZDOTDIR is set, and
+# `zstyle -s` then succeeds with "" so the plugin's fallback never runs
+# ("zshrcd: Directory not found ''.").
+zstyle ':zsh_custom:plugin:confd' directory "${ZDOTDIR:-$HOME/.config/zsh}/conf.d"
 
 # zfunctions location
-zstyle ':zsh_custom:plugin:zfunctions' directory $ZDOTDIR/functions
+zstyle ':zsh_custom:plugin:zfunctions' directory "${ZDOTDIR:-$HOME/.config/zsh}/functions"
+
+# .zshenv already exports HOMEBREW_PREFIX and puts brew on PATH without
+# running path_helper. z1's `source <(brew shellenv)` evals path_helper
+# with PATH_HELPER_ROOT=/opt/homebrew, which rebuilds PATH from brew's
+# paths.d and can drop /bin — then cached-source can't find mkdir/rm/mv.
+zstyle ':z1:homebrew' skip 'yes'
 
 #
 # Prompt

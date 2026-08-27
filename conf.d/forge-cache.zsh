@@ -11,8 +11,26 @@
 # forge.zsh untouched and still regenerable by `forge zsh setup`.
 
 [[ -o interactive ]] || return
-(( $+commands[forge] )) || return
+
+# forge.zsh (generated, later in conf.d) evals `forge zsh plugin` unguarded.
+# Put ~/.local/bin on PATH first (that's where the installer drops it), then
+# if forge still isn't a command, mark the generated file's guards so it
+# skips instead of printing "command not found: forge".
+[[ -d $HOME/.local/bin ]] && path=($HOME/.local/bin $path)
+if ! (( $+commands[forge] )); then
+  typeset -g _FORGE_PLUGIN_LOADED=1 _FORGE_THEME_LOADED=1
+  return
+fi
 (( $+functions[cached-source] )) || return
+
+# Generated forge scripts call `date` (not /bin/date). Keep /bin on PATH
+# even if brew shellenv/path_helper dropped it earlier in startup.
+path+=(/bin /usr/bin /usr/sbin /sbin)
 
 cached-source forge-zsh-plugin forge zsh plugin
 cached-source forge-zsh-theme forge zsh theme
+
+# If `date` still failed, _FORGE_*_LOADED stay empty and forge.zsh evals the
+# same scripts again. Mark loaded so that second eval does not fire.
+: "${_FORGE_PLUGIN_LOADED:=1}"
+: "${_FORGE_THEME_LOADED:=1}"

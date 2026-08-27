@@ -23,15 +23,18 @@ cached-source() {
 
   if [[ ! -s $f ]] || (( ! ${#fresh} )); then
     local tmp=$f.$$.tmp
-    mkdir -p ${f:h}
+    # Absolute paths: brew shellenv's path_helper can drop /bin from PATH
+    # before this function runs, leaving even mkdir/rm/mv unresolved.
+    /bin/mkdir -p ${f:h} || return 1
     if ! "$@" >| $tmp 2>/dev/null || [[ ! -s $tmp ]]; then
-      command rm -f $tmp
+      /bin/rm -f $tmp
       return 1
     fi
-    command mv -f $tmp $f
+    /bin/mv -f $tmp $f
     zcompile -R -- $f 2>/dev/null
   fi
 
+  [[ -s $f ]] || return 1
   source $f
 }
 
