@@ -139,3 +139,9 @@ fi
 
 # Always return success
 true
+
+# ante
+export PATH="/Users/lecoqjacob/.ante/bin:$PATH"
+
+# bun completions
+[ -s "/Users/lecoqjacob/.cache/.bun/_bun" ] && source "/Users/lecoqjacob/.cache/.bun/_bun"
