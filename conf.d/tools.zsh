@@ -24,3 +24,4 @@ fi
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
 export PATH="/Users/lecoqjacob/.cap/bin:$PATH"
+export PATH="/Users/lecoqjacob/.ante/bin:$PATH"
