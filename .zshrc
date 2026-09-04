@@ -85,7 +85,9 @@ plugins=(
   common-functions
   completions
   compstyle
-  confd
+  # confd removed: z1's run_confd already sources conf.d/ at post_zshrc, and
+  # zsh_custom's confd plugin aborts on its stale `$_zshrcd` check before
+  # loading anything — it only printed "Directory not found ''" per startup.
   # direnv: handled by conf.d/direnv.zsh, which caches the hook instead of
   # forking `direnv hook zsh` on every startup.
   dotfiles
