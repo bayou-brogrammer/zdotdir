@@ -25,7 +25,11 @@ path=(
 )
 
 # Keep these arrays unique to avoid bloating PATH/FPATH on repeated loads.
-typeset -U path fpath cdpath
+# -g is REQUIRED: run_confd sources this file from inside a function, and
+# typeset without -g would create a function-local (empty!) `path` that
+# shadows the global one for every later conf.d file — silently killing
+# every `command -v` check, incl. the eza aliases in modern-tools.zsh.
+typeset -gU path fpath cdpath
 
 # Keep completion dumps in cache, not $HOME.
 ZSH_COMPDUMP=${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump}
