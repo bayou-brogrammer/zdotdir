@@ -16,6 +16,8 @@ if [[ -n ${_have[eza]:-} ]]; then
   alias ls='eza --group-directories-first --icons'
   alias ll='eza -l --group-directories-first --icons --git'
   alias la='eza -la --group-directories-first --icons --git'
+  alias lsa='eza -a --group-directories-first --icons'
+  alias ldot='eza -ld --git .*'
   alias lt='eza --tree --level=2 --icons'
   alias tree='eza --tree --icons'
   alias l='eza --group-directories-first --icons'
