@@ -5,22 +5,30 @@
 
 [[ -o interactive ]] || return
 
-# Batch-check which modern tools are available (single hash lookup each, no fork)
+# Batch-check which modern tools are available. command -v is a builtin (no
+# fork) and does a real $path lookup; $+commands[] reads the hash table, which
+# is invalidated by any earlier path= reassignment (homebrew/mise/macos-paths/
+# aws) — so the old check reported EVERY tool as missing and silently skipped
+# every alias in this file.
 typeset -gA _have
 for _tool in eza bat rg fd dust duf procs btm delta doggo hexyl tldr gping lazygit difftastic difft ouch jless watchexec dua bandwhich choose hyperfine tokei zoxide; do
-  (( $+commands[$_tool] )) && _have[$_tool]=1
+  command -v $_tool &>/dev/null && _have[$_tool]=1
 done
 
 # Use modern tools if available
 if [[ -n ${_have[eza]:-} ]]; then
-  alias ls='eza --group-directories-first --icons'
-  alias ll='eza -l --group-directories-first --icons --git'
-  alias la='eza -la --group-directories-first --icons --git'
-  alias lsa='eza -a --group-directories-first --icons'
-  alias ldot='eza -ld --git .*'
-  alias lt='eza --tree --level=2 --icons'
-  alias tree='eza --tree --icons'
-  alias l='eza --group-directories-first --icons'
+  # Full Nerd Font icon treatment (JetBrainsMonoNerdFont via brew cask; Warp
+  # also bundles NF glyph fallback). =auto keeps icon bytes out of pipes.
+  # Long views add a header row, git status columns, and color-scaled
+  # size/age columns.
+  alias ls='eza --group-directories-first --icons=auto'
+  alias ll='eza -lh --git --color-scale=all --group-directories-first --icons=auto'
+  alias la='eza -lah --git --color-scale=all --group-directories-first --icons=auto'
+  alias lsa='eza -a --group-directories-first --icons=auto'
+  alias ldot='eza -ld --git --icons=auto .*'
+  alias lt='eza --tree --level=2 --icons=auto'
+  alias tree='eza --tree --icons=auto'
+  alias l='eza --group-directories-first --icons=auto'
 fi
 
 if [[ -n ${_have[bat]:-} ]]; then
