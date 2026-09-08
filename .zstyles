@@ -21,8 +21,15 @@ zstyle ':zsh_custom:plugin:completion' compstyle zshzoo
 # History
 #
 
-zstyle ':zephyr:plugin:history:aux:sqlite' enable yes
-zstyle ':zephyr:plugin:history:aux:json' enable yes
+# Canonical zsh history. Pin z1's `:z1:history` styles to the exact values
+# conf.d/history.zsh sets, so every shell context agrees on one HISTFILE.
+# conf.d only loads via run_confd (a post-zshrc hook that fires on the first
+# prompt), so in contexts that never draw a prompt — `zsh -ic`, tools
+# spawning interactive shells — z1's own defaults otherwise win and fork
+# history into a second, dotless file.
+zstyle ':z1:history' histfile "$ZSH_DATA_DIR/.zsh_history"
+zstyle ':z1:history' savehist 50000
+zstyle ':z1:history' histsize 50000
 
 #
 # Editor

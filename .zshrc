@@ -114,6 +114,18 @@ zstyle ':zsh_custom:antidote' use-antibody yes
 # Create an amazing Zsh config using antidote plugins.
 source $ZDOTDIR/lib/antidote-fast.zsh
 
+# History: canonical values, re-asserted after ALL plugins load. Two z1
+# copies load here: the newer zshrc1/z1.zsh honors the ':z1:history'
+# zstyles from .zstyles, but the vendored zsh_custom/init/z1.zsh (loaded
+# later via zsh_custom.zsh's init/*.zsh glob) hard-sets
+# HISTFILE=$ZSH_DATA_DIR/zsh_history — dotless — and has no zstyle opt-out.
+# Whatever plugin order or future updates, every interactive shell must
+# end up on the one history file, with the same values conf.d/history.zsh
+# enforces again at first prompt.
+HISTFILE="$ZSH_DATA_DIR/.zsh_history"
+SAVEHIST=50000
+HISTSIZE=50000
+
 # ZSH_COMPDUMP=$XDG_CACHE_HOME/zsh/zcompdump
 # compinit -i -d "$ZSH_COMPDUMP"
 
@@ -141,3 +153,7 @@ fi
 
 # Always return success
 true
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

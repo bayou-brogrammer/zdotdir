@@ -4,7 +4,7 @@ if [[ $OSTYPE == darwin* ]]; then
   # Use LaunchServices for general URLs and explicitly override klam-ext's
   # macOS default, which is Google Chrome.
   export BROWSER="open"
-  export KLAM_BROWSER="Dia"
+  #export KLAM_BROWSER="Dia"
 fi
 
 [[ -d "$HOME/.opencode/bin" ]] && path=("$HOME/.opencode/bin" $path)
